@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="tile_icon_options">
+        <item>@drawable/ic_laptop_black_24dp</item>
+        <item>@drawable/ic_laptop_chromebook_black_24dp</item>
+        <item>@drawable/ic_laptop_mac_black_24dp</item>
+        <item>@drawable/ic_laptop_windows_black_24dp</item>
+        <item>@drawable/ic_desktop_mac_black_24dp</item>
+        <item>@drawable/ic_desktop_windows_black_24dp</item>
+    </array>
+    <string-array name="tile_icon_option_names">
+        <item>Laptop</item>
+        <item>Laptop (Chrome)</item>
+        <item>Laptop (Mac)</item>
+        <item>Laptop (Windows)</item>
+        <item>Desktop (Mac)</item>
+        <item>Desktop (Windows)</item>
+    </string-array>
+</resources>

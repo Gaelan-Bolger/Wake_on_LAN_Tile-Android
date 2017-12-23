@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">WoL Tile</string>
+    <string name="tile_label">Wake on LAN</string>
+
+    <string name="host_name">Host Name</string>
+    <string name="ip_address">IP Address</string>
+    <string name="mac_address">MAC Address</string>
+    <string name="port">Port</string>
+    <string name="_7">7</string>
+    <string name="_9">9</string>
+
+    <string name="save">Save</string>
+</resources>
