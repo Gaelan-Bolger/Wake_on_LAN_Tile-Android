@@ -10,4 +10,6 @@
     <string name="_9">9</string>
 
     <string name="save">Save</string>
+    <string name="discover">Discover</string>
+    <string name="settings">Settings</string>
 </resources>

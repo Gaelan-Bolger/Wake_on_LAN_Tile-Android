@@ -1,4 +1,4 @@
-package com.gaelanbolger.woltile;
+package com.gaelanbolger.woltile.adapter;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

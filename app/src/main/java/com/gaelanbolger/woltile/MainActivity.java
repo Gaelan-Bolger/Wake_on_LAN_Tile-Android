@@ -1,6 +1,7 @@
 package com.gaelanbolger.woltile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -23,9 +24,14 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.gaelanbolger.woltile.adapter.OnItemClickListener;
+import com.gaelanbolger.woltile.adapter.SpaceItemDecoration;
+import com.gaelanbolger.woltile.data.Host;
+import com.gaelanbolger.woltile.discover.DiscoverDialog;
+import com.gaelanbolger.woltile.settings.SettingsActivity;
 import com.gaelanbolger.woltile.util.DispUtils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DiscoverDialog.Listener {
 
     private SharedPreferences preferences;
 
@@ -80,8 +86,21 @@ public class MainActivity extends AppCompatActivity {
             case R.id.item_save:
                 onSaveSettings();
                 return true;
+            case R.id.item_discover:
+                new DiscoverDialog().show(getSupportFragmentManager(), DiscoverDialog.TAG);
+                return true;
+            case R.id.item_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onHostSelected(Host host) {
+        hostNameText.setText(host.getName());
+        ipAddressText.setText(host.getAddress());
+        macAddressText.setText(host.getMac());
     }
 
     @NonNull
@@ -106,22 +125,17 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, "Settings saved", Toast.LENGTH_SHORT).show();
     }
 
-    interface ItemClickListener {
-
-        void onItemClick(View view, int position);
-    }
-
     class TileIconOptionsAdapter extends RecyclerView.Adapter<TileIconOptionsAdapter.Holder> {
 
         private final LayoutInflater inflater;
         private final ColorStateList selectedColor;
         private final ColorStateList unselectedColor;
-        private final ItemClickListener clickListener;
+        private final OnItemClickListener clickListener;
 
         private int[] items;
         private int selectedItem;
 
-        TileIconOptionsAdapter(Context context, int[] items, int selectedItem, @Nullable ItemClickListener clickListener) {
+        TileIconOptionsAdapter(Context context, int[] items, int selectedItem, @Nullable OnItemClickListener clickListener) {
             this.inflater = LayoutInflater.from(context);
             this.selectedColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.colorAccent));
             this.unselectedColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.colorPrimary));
