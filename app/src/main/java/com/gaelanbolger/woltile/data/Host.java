@@ -4,26 +4,43 @@ import java.util.Objects;
 
 public class Host {
 
-    private String name;
-    private String address;
-    private String mac;
+    private static final String EMPTY = "";
+    private static final int DEFAULT_PORT = 9;
 
-    public Host(String name, String address, String mac) {
+    private String name;
+    private String ip;
+    private String mac;
+    private int port;
+
+    public Host(String name, String ip) {
+        this(name, ip, EMPTY, DEFAULT_PORT);
+    }
+
+    public Host(String name, String ip, String mac) {
+        this(name, ip, mac, DEFAULT_PORT);
+    }
+
+    public Host(String name, String ip, String mac, int port) {
         this.name = name;
-        this.address = address;
+        this.ip = ip;
         this.mac = mac;
+        this.port = port;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getAddress() {
-        return address;
+    public String getIp() {
+        return ip;
     }
 
     public String getMac() {
         return mac;
+    }
+
+    public int getPort() {
+        return port;
     }
 
     @Override
@@ -31,22 +48,24 @@ public class Host {
         if (this == o) return true;
         if (!(o instanceof Host)) return false;
         Host host = (Host) o;
-        return Objects.equals(getName(), host.getName()) &&
-                Objects.equals(getAddress(), host.getAddress()) &&
+        return getPort() == host.getPort() &&
+                Objects.equals(getName(), host.getName()) &&
+                Objects.equals(getIp(), host.getIp()) &&
                 Objects.equals(getMac(), host.getMac());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getAddress(), getMac());
+        return Objects.hash(getName(), getIp(), getMac(), getPort());
     }
 
     @Override
     public String toString() {
         return "Host{" +
                 "name='" + name + '\'' +
-                ", address='" + address + '\'' +
+                ", ip='" + ip + '\'' +
                 ", mac='" + mac + '\'' +
+                ", port=" + port +
                 '}';
     }
 }

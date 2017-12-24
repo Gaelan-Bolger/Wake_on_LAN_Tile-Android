@@ -27,11 +27,12 @@ import android.widget.Toast;
 import com.gaelanbolger.woltile.adapter.OnItemClickListener;
 import com.gaelanbolger.woltile.adapter.SpaceItemDecoration;
 import com.gaelanbolger.woltile.data.Host;
-import com.gaelanbolger.woltile.discover.DiscoverDialog;
+import com.gaelanbolger.woltile.discover.DiscoverActivity;
+import com.gaelanbolger.woltile.discover.DiscoverFragment;
 import com.gaelanbolger.woltile.settings.SettingsActivity;
 import com.gaelanbolger.woltile.util.DispUtils;
 
-public class MainActivity extends AppCompatActivity implements DiscoverDialog.Listener {
+public class MainActivity extends AppCompatActivity implements DiscoverFragment.Listener {
 
     private SharedPreferences preferences;
 
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements DiscoverDialog.Li
                 onSaveSettings();
                 return true;
             case R.id.item_discover:
-                new DiscoverDialog().show(getSupportFragmentManager(), DiscoverDialog.TAG);
+                startActivity(new Intent(this, DiscoverActivity.class));
                 return true;
             case R.id.item_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements DiscoverDialog.Li
     @Override
     public void onHostSelected(Host host) {
         hostNameText.setText(host.getName());
-        ipAddressText.setText(host.getAddress());
+        ipAddressText.setText(host.getIp());
         macAddressText.setText(host.getMac());
     }
 

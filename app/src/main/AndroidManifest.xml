@@ -21,7 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".settings.SettingsActivity"></activity>
+        <activity
+            android:name=".discover.DiscoverActivity"
+            android:label="@string/discover" />
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/settings" />
 
         <service
             android:name=".WolTileService"

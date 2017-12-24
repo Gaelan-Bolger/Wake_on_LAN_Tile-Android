@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.gaelanbolger.woltile.R;
 import com.gaelanbolger.woltile.data.Host;
 
 import java.util.ArrayList;
@@ -26,14 +27,14 @@ public class HostAdapter extends RecyclerView.Adapter<HostAdapter.Holder> {
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new Holder(inflater.inflate(android.R.layout.simple_list_item_2, parent, false));
+        return new Holder(inflater.inflate(R.layout.item_host, parent, false));
     }
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         Host host = getItem(position);
         holder.text1.setText(host.getName());
-        holder.text2.setText(host.getAddress());
+        holder.text2.setText(host.getIp());
         holder.itemView.setOnClickListener(view -> {
             if (clickListener != null) clickListener.onItemClick(view, holder.getAdapterPosition());
         });
