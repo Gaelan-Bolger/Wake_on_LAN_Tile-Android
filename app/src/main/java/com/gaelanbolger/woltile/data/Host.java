@@ -9,7 +9,6 @@ import java.util.Objects;
 @Entity
 public class Host {
 
-    public static final String DEFAULT_MAC = "00-00-00-00-00-00";
     public static final int DEFAULT_PORT = 9;
 
     @PrimaryKey
@@ -17,7 +16,7 @@ public class Host {
     private String name;
     private String icon;
     private String ip;
-    private String mac = DEFAULT_MAC;
+    private String mac;
     private int port = DEFAULT_PORT;
 
     public Host() {

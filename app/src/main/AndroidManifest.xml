@@ -22,6 +22,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".EditTileActivity"
+            android:label="@string/edit"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
             android:name=".discover.DiscoverActivity"
             android:label="@string/discover" />
         <activity
@@ -30,8 +34,9 @@
 
         <service
             android:name=".qs.WolTile1Service"
-            android:icon="@drawable/ic_laptop_black_24dp"
-            android:label="@string/tile_label"
+            android:enabled="false"
+            android:icon="@drawable/ic_laptop_general_normal"
+            android:label="@string/tile_1"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
@@ -39,8 +44,9 @@
         </service>
         <service
             android:name=".qs.WolTile2Service"
-            android:icon="@drawable/ic_laptop_black_24dp"
-            android:label="@string/tile_label"
+            android:enabled="false"
+            android:icon="@drawable/ic_laptop_general_normal"
+            android:label="@string/tile_2"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
@@ -48,8 +54,9 @@
         </service>
         <service
             android:name=".qs.WolTile3Service"
-            android:icon="@drawable/ic_laptop_black_24dp"
-            android:label="@string/tile_label"
+            android:enabled="false"
+            android:icon="@drawable/ic_laptop_general_normal"
+            android:label="@string/tile_3"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
@@ -57,8 +64,9 @@
         </service>
         <service
             android:name=".qs.WolTile4Service"
-            android:icon="@drawable/ic_laptop_black_24dp"
-            android:label="@string/tile_label"
+            android:enabled="false"
+            android:icon="@drawable/ic_laptop_general_normal"
+            android:label="@string/tile_4"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
@@ -66,8 +74,9 @@
         </service>
         <service
             android:name=".qs.WolTile5Service"
-            android:icon="@drawable/ic_laptop_black_24dp"
-            android:label="@string/tile_label"
+            android:enabled="false"
+            android:icon="@drawable/ic_laptop_general_normal"
+            android:label="@string/tile_5"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
@@ -75,8 +84,9 @@
         </service>
         <service
             android:name=".qs.WolTile6Service"
-            android:icon="@drawable/ic_laptop_black_24dp"
-            android:label="@string/tile_label"
+            android:enabled="false"
+            android:icon="@drawable/ic_laptop_general_normal"
+            android:label="@string/tile_6"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
@@ -84,8 +94,9 @@
         </service>
         <service
             android:name=".qs.WolTile7Service"
-            android:icon="@drawable/ic_laptop_black_24dp"
-            android:label="@string/tile_label"
+            android:enabled="false"
+            android:icon="@drawable/ic_laptop_general_normal"
+            android:label="@string/tile_7"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
@@ -93,8 +104,9 @@
         </service>
         <service
             android:name=".qs.WolTile8Service"
-            android:icon="@drawable/ic_laptop_black_24dp"
-            android:label="@string/tile_label"
+            android:enabled="false"
+            android:icon="@drawable/ic_laptop_general_normal"
+            android:label="@string/tile_8"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
@@ -102,8 +114,9 @@
         </service>
         <service
             android:name=".qs.WolTile9Service"
-            android:icon="@drawable/ic_laptop_black_24dp"
-            android:label="@string/tile_label"
+            android:enabled="false"
+            android:icon="@drawable/ic_laptop_general_normal"
+            android:label="@string/tile_9"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />

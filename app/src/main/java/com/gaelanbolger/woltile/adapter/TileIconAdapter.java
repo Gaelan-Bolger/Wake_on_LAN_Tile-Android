@@ -1,11 +1,8 @@
 package com.gaelanbolger.woltile.adapter;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,21 +15,13 @@ import com.gaelanbolger.woltile.R;
 public class TileIconAdapter extends RecyclerView.Adapter<TileIconAdapter.Holder> {
 
     private final LayoutInflater inflater;
-    private final ColorStateList selectedColor;
-    private final ColorStateList unselectedColor;
     private final OnItemClickListener clickListener;
 
     private String[] items;
     private String selectedItem;
 
-    public TileIconAdapter(Context context, String[] items, String selectedItem) {
-        this(context, items, selectedItem, null);
-    }
-
     public TileIconAdapter(Context context, String[] items, String selectedItem, @Nullable OnItemClickListener clickListener) {
         this.inflater = LayoutInflater.from(context);
-        this.selectedColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.colorAccent));
-        this.unselectedColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.colorPrimary));
         this.items = items;
         this.selectedItem = selectedItem;
         this.clickListener = clickListener;
@@ -46,12 +35,11 @@ public class TileIconAdapter extends RecyclerView.Adapter<TileIconAdapter.Holder
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         String item = getItem(position);
-        ImageViewCompat.setImageTintList(holder.icon, TextUtils.equals(selectedItem, item) ? selectedColor : unselectedColor);
-
         Resources res = holder.itemView.getResources();
         int resId = res.getIdentifier(item, "drawable", holder.itemView.getContext().getPackageName());
         holder.icon.setImageResource(resId);
-        holder.icon.setOnClickListener(view -> {
+        holder.icon.setEnabled(TextUtils.equals(selectedItem, item));
+        holder.itemView.setOnClickListener(view -> {
             int adapterPosition = holder.getAdapterPosition();
             selectedItem = getItem(adapterPosition);
             notifyDataSetChanged();

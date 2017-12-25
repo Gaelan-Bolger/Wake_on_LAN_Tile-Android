@@ -8,7 +8,7 @@ import android.support.annotation.RequiresPermission;
 
 import java.util.regex.Pattern;
 
-public class NetUtils {
+public class NetworkUtils {
 
     @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
     public static boolean isWifiConnected(Context context) {
@@ -23,7 +23,7 @@ public class NetUtils {
 
     public static class IpUtils {
 
-        private static final String REGEX_IPV4 = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+        public static final String REGEX_IPV4 = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
 
         public static boolean isValid(String ip) {
             Pattern pattern = Pattern.compile(REGEX_IPV4);
@@ -33,7 +33,7 @@ public class NetUtils {
 
     public static class MacUtils {
 
-        private static final String REGEX_MAC = "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$";
+        public static final String REGEX_MAC = "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$";
 
         public static boolean isValid(String mac) {
             Pattern pattern = Pattern.compile(REGEX_MAC);

@@ -5,4 +5,6 @@
     <color name="colorAccent">#c1131f</color>
 
     <color name="ic_launcher_background">@color/colorPrimary</color>
+    <color name="ic_light_normal">#FFFFFFFF</color>
+    <color name="ic_light_disable">#88FFFFFF</color>
 </resources>

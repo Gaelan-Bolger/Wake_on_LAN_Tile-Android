@@ -8,12 +8,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.gaelanbolger.woltile.R;
-import com.gaelanbolger.woltile.data.AppDatabase;
 import com.gaelanbolger.woltile.data.Host;
-import com.gaelanbolger.woltile.dialog.HostDetailDialog;
 
 public class DiscoverActivity extends AppCompatActivity implements DiscoverFragment.Listener {
+
+    public static final String EXTRA_HOST_NAME = "host_name";
+    public static final String EXTRA_IP_ADDRESS = "ip_address";
+    public static final String EXTRA_MAC_ADDRESS = "mac_address";
 
     public static void start(Context context) {
         Intent starter = new Intent(context, DiscoverActivity.class);
@@ -47,12 +48,11 @@ public class DiscoverActivity extends AppCompatActivity implements DiscoverFragm
 
     @Override
     public void onHostSelected(Host host) {
-        String title = getString(R.string.new_host);
-        HostDetailDialog dialog = HostDetailDialog.newInstance(title, host, h -> {
-            AppDatabase db = AppDatabase.getInstance(DiscoverActivity.this);
-            db.hostDao().insertAll(h);
-            finish();
-        });
-        dialog.show(getSupportFragmentManager(), HostDetailDialog.TAG);
+        Intent data = new Intent();
+        data.putExtra(EXTRA_HOST_NAME, host.getName());
+        data.putExtra(EXTRA_IP_ADDRESS, host.getIp());
+        data.putExtra(EXTRA_MAC_ADDRESS, host.getMac());
+        setResult(RESULT_OK, data);
+        finish();
     }
 }

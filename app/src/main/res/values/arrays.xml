@@ -2,19 +2,19 @@
 <resources>
 
     <array name="tile_icon_options">
-        <item>@drawable/ic_laptop_black_24dp</item>
-        <item>@drawable/ic_laptop_chromebook_black_24dp</item>
-        <item>@drawable/ic_laptop_mac_black_24dp</item>
-        <item>@drawable/ic_laptop_windows_black_24dp</item>
-        <item>@drawable/ic_desktop_mac_black_24dp</item>
-        <item>@drawable/ic_desktop_windows_black_24dp</item>
+        <item>@drawable/ic_laptop_general</item>
+        <item>@drawable/ic_laptop_chromebook</item>
+        <item>@drawable/ic_laptop_mac</item>
+        <item>@drawable/ic_laptop_windows</item>
+        <item>@drawable/ic_desktop_mac</item>
+        <item>@drawable/ic_desktop_windows</item>
     </array>
     <string-array name="tile_icon_option_names">
-        <item>ic_laptop_black_24dp</item>
-        <item>ic_laptop_chromebook_black_24dp</item>
-        <item>ic_laptop_mac_black_24dp</item>
-        <item>ic_laptop_windows_black_24dp</item>
-        <item>ic_desktop_mac_black_24dp</item>
-        <item>ic_desktop_windows_black_24dp</item>
+        <item>ic_laptop_general</item>
+        <item>ic_laptop_chromebook</item>
+        <item>ic_laptop_mac</item>
+        <item>ic_laptop_windows</item>
+        <item>ic_desktop_mac</item>
+        <item>ic_desktop_windows</item>
     </string-array>
 </resources>

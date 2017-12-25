@@ -1,10 +1,8 @@
 package com.gaelanbolger.woltile.qs;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Icon;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.text.TextUtils;
@@ -14,18 +12,18 @@ import com.gaelanbolger.woltile.MainActivity;
 import com.gaelanbolger.woltile.R;
 import com.gaelanbolger.woltile.data.AppDatabase;
 import com.gaelanbolger.woltile.data.Host;
-import com.gaelanbolger.woltile.settings.AppSettings;
-import com.gaelanbolger.woltile.util.NetUtils;
-import com.gaelanbolger.woltile.util.ResUtils;
+import com.gaelanbolger.woltile.util.NetworkUtils;
+import com.gaelanbolger.woltile.util.ResourceUtils;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.List;
 
 public abstract class AbsWolTileService extends TileService {
 
     private static final String TAG = AbsWolTileService.class.getSimpleName();
+
+    private Host mHost;
 
     abstract TileComponent getTileComponent();
 
@@ -46,17 +44,16 @@ public abstract class AbsWolTileService extends TileService {
         super.onStartListening();
         Log.d(TAG, "onStartListening: ");
         AppDatabase db = AppDatabase.getInstance(this);
-        List<Host> hosts = db.hostDao().getAll();
-        Host host = hosts.get(getTileComponent().ordinal());
+        mHost = db.hostDao().getById(getTileComponent().ordinal());
+        if (mHost == null) mHost = new Host(getTileComponent().ordinal());
 
-        String name = host.getName();
+        String name = mHost.getName();
         getQsTile().setLabel(!TextUtils.isEmpty(name) ? name : getString(getTileComponent().getTitleResId()));
 
-        String icon = host.getIcon();
-        int resId = ResUtils.getResourceId(this, icon, "drawable");
-        getQsTile().setIcon(Icon.createWithResource(this, resId > 0 ? resId : R.drawable.ic_laptop_black_24dp));
+        int resId = ResourceUtils.getDrawableForName(this, mHost.getIcon());
+        getQsTile().setIcon(Icon.createWithResource(this, resId > 0 ? resId : R.drawable.ic_laptop_general));
 
-        boolean wifiConnected = NetUtils.isWifiConnected(this);
+        boolean wifiConnected = NetworkUtils.isWifiConnected(this);
         getQsTile().setState(wifiConnected ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE);
 
         getQsTile().updateTile();
@@ -72,19 +69,14 @@ public abstract class AbsWolTileService extends TileService {
     public void onClick() {
         super.onClick();
         Log.d(TAG, "onClick: ");
-        SharedPreferences preferences = getSharedPreferences();
-        String ipAddress = preferences.getString(AppSettings.PREF_IP_ADDRESS, null);
-        String macAddress = preferences.getString(AppSettings.PREF_MAC_ADDRESS, null);
-        int port = preferences.getInt(AppSettings.PREF_PORT, Host.DEFAULT_PORT);
-        if (!TextUtils.isEmpty(ipAddress) && !TextUtils.isEmpty(macAddress)) {
-            new WakeOnLanTask(ipAddress, macAddress, port).execute();
+        String ipAddress = mHost.getIp();
+        String macAddress = mHost.getMac();
+        if (TextUtils.isEmpty(ipAddress) || TextUtils.isEmpty(macAddress)) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivityAndCollapse(intent);
         } else {
-            startActivityAndCollapse(new Intent(this, MainActivity.class));
+            new WakeOnLanTask(ipAddress, macAddress, mHost.getPort()).execute();
         }
-    }
-
-    private SharedPreferences getSharedPreferences() {
-        return PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     // https://stackoverflow.com/a/13655016/1670446
@@ -103,7 +95,7 @@ public abstract class AbsWolTileService extends TileService {
         @Override
         protected Void doInBackground(Void... param) {
             try {
-                byte[] macBytes = NetUtils.MacUtils.getMacBytes(macAddress);
+                byte[] macBytes = NetworkUtils.MacUtils.getMacBytes(macAddress);
                 byte[] bytes = new byte[6 + 16 * macBytes.length];
                 for (int i = 0; i < 6; i++) {
                     bytes[i] = (byte) 0xFF;

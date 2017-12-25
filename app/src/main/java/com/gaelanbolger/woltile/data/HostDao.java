@@ -22,6 +22,9 @@ public interface HostDao {
     @Query("SELECT * FROM Host WHERE id = :id")
     Host getById(int id);
 
+    @Query("SELECT * FROM Host WHERE id = :id")
+    LiveData<Host> getByIdLive(int id);
+
     @Query("SELECT COUNT(*) FROM Host")
     int count();
 
