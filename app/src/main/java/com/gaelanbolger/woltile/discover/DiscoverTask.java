@@ -52,9 +52,9 @@ public class DiscoverTask extends AsyncTask<Void, Host, Void> {
                         try {
                             InetAddress inetAddress = InetAddress.getByName(testIp);
                             if (inetAddress.isReachable(90)) {
-                                String hostName = inetAddress.getHostName();
-                                String hostAddress = inetAddress.getHostAddress();
-                                Host host = new Host(hostName, hostAddress);
+                                Host host = new Host();
+                                host.setName(inetAddress.getHostName());
+                                host.setIp(inetAddress.getHostAddress());
                                 publishProgress(host);
                                 mHosts.add(host);
                             }

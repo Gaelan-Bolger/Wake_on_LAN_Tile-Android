@@ -1,5 +1,7 @@
 package com.gaelanbolger.woltile.settings;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
@@ -7,6 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    public static void start(Context context) {
+        Intent starter = new Intent(context, SettingsActivity.class);
+        context.startActivity(starter);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

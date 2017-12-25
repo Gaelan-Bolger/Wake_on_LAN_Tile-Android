@@ -21,13 +21,9 @@ import com.gaelanbolger.woltile.adapter.HostAdapter;
 import com.gaelanbolger.woltile.adapter.OnItemClickListener;
 import com.gaelanbolger.woltile.data.Host;
 
-import java.util.ArrayList;
-
-
-public class DiscoverFragment extends Fragment implements DiscoverTask.Callback, OnItemClickListener {
+public class DiscoverFragment extends Fragment implements OnItemClickListener {
 
     public interface Listener {
-
         void onHostSelected(Host host);
     }
 
@@ -80,23 +76,13 @@ public class DiscoverFragment extends Fragment implements DiscoverTask.Callback,
         if (context instanceof Listener)
             mListener = (Listener) context;
         else
-            throw new IllegalArgumentException("Activity must implement Listener");
+            throw new IllegalArgumentException("Activity must implement DiscoverFragment.Listener");
     }
 
     @Override
     public void onDetach() {
         mListener = null;
         super.onDetach();
-    }
-
-    @Override
-    public void onNewHostDiscovered(Host host) {
-        mHostsAdapter.addItem(host);
-    }
-
-    @Override
-    public void onAllHostsDiscovered(ArrayList<Host> hosts) {
-        mLoadingItem.setVisible(false);
     }
 
     @Override

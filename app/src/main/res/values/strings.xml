@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">WoL Tile</string>
-    <string name="tile_label">Wake on LAN</string>
 
+    <string name="new_host">New host</string>
+    <string name="edit_host">Edit host</string>
+    <string name="host">Host</string>
     <string name="host_name">Host Name</string>
     <string name="ip_address">IP Address</string>
     <string name="mac_address">MAC Address</string>
@@ -9,8 +11,19 @@
     <string name="_7">7</string>
     <string name="_9">9</string>
 
+    <string name="loading">Loading</string>
     <string name="save">Save</string>
     <string name="discover">Discover</string>
     <string name="settings">Settings</string>
-    <string name="loading">Loading</string>
+
+    <string name="tile_label">Wake on LAN</string>
+    <string name="tile_1">WoL Tile 1</string>
+    <string name="tile_2">WoL Tile 2</string>
+    <string name="tile_3">WoL Tile 3</string>
+    <string name="tile_4">WoL Tile 4</string>
+    <string name="tile_5">WoL Tile 5</string>
+    <string name="tile_6">WoL Tile 6</string>
+    <string name="tile_7">WoL Tile 7</string>
+    <string name="tile_8">WoL Tile 8</string>
+    <string name="tile_9">WoL Tile 9</string>
 </resources>

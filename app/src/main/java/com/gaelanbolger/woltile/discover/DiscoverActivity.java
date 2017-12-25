@@ -1,15 +1,24 @@
 package com.gaelanbolger.woltile.discover;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import com.gaelanbolger.woltile.R;
+import com.gaelanbolger.woltile.data.AppDatabase;
 import com.gaelanbolger.woltile.data.Host;
+import com.gaelanbolger.woltile.dialog.HostDetailDialog;
 
 public class DiscoverActivity extends AppCompatActivity implements DiscoverFragment.Listener {
+
+    public static void start(Context context) {
+        Intent starter = new Intent(context, DiscoverActivity.class);
+        context.startActivity(starter);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +47,12 @@ public class DiscoverActivity extends AppCompatActivity implements DiscoverFragm
 
     @Override
     public void onHostSelected(Host host) {
-        Toast.makeText(this, host.toString(), Toast.LENGTH_SHORT).show();
+        String title = getString(R.string.new_host);
+        HostDetailDialog dialog = HostDetailDialog.newInstance(title, host, h -> {
+            AppDatabase db = AppDatabase.getInstance(DiscoverActivity.this);
+            db.hostDao().insertAll(h);
+            finish();
+        });
+        dialog.show(getSupportFragmentManager(), HostDetailDialog.TAG);
     }
 }

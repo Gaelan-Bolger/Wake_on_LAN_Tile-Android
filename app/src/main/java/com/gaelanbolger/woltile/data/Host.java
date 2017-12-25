@@ -1,46 +1,79 @@
 package com.gaelanbolger.woltile.data;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.util.Objects;
 
+@Entity
 public class Host {
 
-    private static final String EMPTY = "";
-    private static final int DEFAULT_PORT = 9;
+    public static final String DEFAULT_MAC = "00-00-00-00-00-00";
+    public static final int DEFAULT_PORT = 9;
 
+    @PrimaryKey
+    private long id;
     private String name;
+    private String icon;
     private String ip;
-    private String mac;
-    private int port;
+    private String mac = DEFAULT_MAC;
+    private int port = DEFAULT_PORT;
 
-    public Host(String name, String ip) {
-        this(name, ip, EMPTY, DEFAULT_PORT);
+    public Host() {
     }
 
-    public Host(String name, String ip, String mac) {
-        this(name, ip, mac, DEFAULT_PORT);
+    @Ignore
+    public Host(int id) {
+        this.id = id;
     }
 
-    public Host(String name, String ip, String mac, int port) {
-        this.name = name;
-        this.ip = ip;
-        this.mac = mac;
-        this.port = port;
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
     public String getIp() {
         return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
     public String getMac() {
         return mac;
     }
 
+    public void setMac(String mac) {
+        this.mac = mac;
+    }
+
     public int getPort() {
         return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 
     @Override
@@ -48,21 +81,25 @@ public class Host {
         if (this == o) return true;
         if (!(o instanceof Host)) return false;
         Host host = (Host) o;
-        return getPort() == host.getPort() &&
-                Objects.equals(getName(), host.getName()) &&
-                Objects.equals(getIp(), host.getIp()) &&
-                Objects.equals(getMac(), host.getMac());
+        return id == host.id &&
+                port == host.port &&
+                Objects.equals(name, host.name) &&
+                Objects.equals(icon, host.icon) &&
+                Objects.equals(ip, host.ip) &&
+                Objects.equals(mac, host.mac);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getIp(), getMac(), getPort());
+        return Objects.hash(id, name, icon, ip, mac, port);
     }
 
     @Override
     public String toString() {
         return "Host{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", icon='" + icon + '\'' +
                 ", ip='" + ip + '\'' +
                 ", mac='" + mac + '\'' +
                 ", port=" + port +

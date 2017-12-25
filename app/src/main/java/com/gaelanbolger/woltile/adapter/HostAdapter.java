@@ -14,14 +14,20 @@ import com.gaelanbolger.woltile.data.Host;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class HostAdapter extends RecyclerView.Adapter<HostAdapter.Holder> {
 
-    protected LayoutInflater inflater;
-    private List<Host> hosts;
+    private LayoutInflater inflater;
     private OnItemClickListener clickListener;
+    private List<Host> hosts;
 
     public HostAdapter(Context context, @Nullable OnItemClickListener clickListener) {
+        this(context, null, clickListener);
+    }
+
+    public HostAdapter(Context context, List<Host> hosts, @Nullable OnItemClickListener clickListener) {
         this.inflater = LayoutInflater.from(context);
+        this.hosts = hosts;
         this.clickListener = clickListener;
     }
 
@@ -50,22 +56,43 @@ public class HostAdapter extends RecyclerView.Adapter<HostAdapter.Holder> {
         notifyDataSetChanged();
     }
 
-    public void addItem(Host host) {
-        if (hosts == null) hosts = new ArrayList<>();
+    public Host getItem(int position) {
+        if (getItemCount() > position) {
+            return hosts.get(position);
+        }
+        return null;
+    }
+
+    public Host removeItem(int position) {
+        if (getItemCount() > position) {
+            Host host = hosts.remove(position);
+            notifyItemRemoved(position);
+            return host;
+        }
+        return null;
+    }
+
+    public void insertItem(Host host) {
+        if (hosts == null)
+            hosts = new ArrayList<>();
         hosts.add(host);
         notifyItemInserted(getItemCount() - 1);
     }
 
-    public Host getItem(int position) {
-        return hosts.get(position);
+    public void moveItem(int from, int to) {
+        if (getItemCount() > from && getItemCount() > to) {
+            Host host = hosts.remove(from);
+            hosts.add(to, host);
+            notifyItemMoved(from, to);
+        }
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
+    protected class Holder extends RecyclerView.ViewHolder {
 
         private TextView text1;
         private TextView text2;
 
-        public Holder(View itemView) {
+        Holder(View itemView) {
             super(itemView);
             text1 = itemView.findViewById(android.R.id.text1);
             text2 = itemView.findViewById(android.R.id.text2);

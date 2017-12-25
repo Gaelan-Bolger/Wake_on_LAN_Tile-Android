@@ -1,4 +1,4 @@
-package com.gaelanbolger.woltile;
+package com.gaelanbolger.woltile.qs;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,16 +10,24 @@ import android.service.quicksettings.TileService;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.gaelanbolger.woltile.util.MacUtils;
-import com.gaelanbolger.woltile.util.NetworkUtils;
+import com.gaelanbolger.woltile.MainActivity;
+import com.gaelanbolger.woltile.R;
+import com.gaelanbolger.woltile.data.AppDatabase;
+import com.gaelanbolger.woltile.data.Host;
+import com.gaelanbolger.woltile.settings.AppSettings;
+import com.gaelanbolger.woltile.util.NetUtils;
+import com.gaelanbolger.woltile.util.ResUtils;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.List;
 
-public class WolTileService extends TileService {
+public abstract class AbsWolTileService extends TileService {
 
-    private static final String TAG = WolTileService.class.getSimpleName();
+    private static final String TAG = AbsWolTileService.class.getSimpleName();
+
+    abstract TileComponent getTileComponent();
 
     @Override
     public void onTileAdded() {
@@ -37,13 +45,20 @@ public class WolTileService extends TileService {
     public void onStartListening() {
         super.onStartListening();
         Log.d(TAG, "onStartListening: ");
-        SharedPreferences preferences = getSharedPreferences();
-        String hostName = preferences.getString(WolTileApplication.PREF_HOST_NAME, null);
-        getQsTile().setLabel(!TextUtils.isEmpty(hostName) ? hostName : getString(R.string.tile_label));
-        int resId = preferences.getInt(WolTileApplication.PREF_ICON, 0);
+        AppDatabase db = AppDatabase.getInstance(this);
+        List<Host> hosts = db.hostDao().getAll();
+        Host host = hosts.get(getTileComponent().ordinal());
+
+        String name = host.getName();
+        getQsTile().setLabel(!TextUtils.isEmpty(name) ? name : getString(getTileComponent().getTitleResId()));
+
+        String icon = host.getIcon();
+        int resId = ResUtils.getResourceId(this, icon, "drawable");
         getQsTile().setIcon(Icon.createWithResource(this, resId > 0 ? resId : R.drawable.ic_laptop_black_24dp));
-        boolean wifiConnected = NetworkUtils.isWifiConnected(this);
+
+        boolean wifiConnected = NetUtils.isWifiConnected(this);
         getQsTile().setState(wifiConnected ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE);
+
         getQsTile().updateTile();
     }
 
@@ -58,9 +73,9 @@ public class WolTileService extends TileService {
         super.onClick();
         Log.d(TAG, "onClick: ");
         SharedPreferences preferences = getSharedPreferences();
-        String ipAddress = preferences.getString(WolTileApplication.PREF_IP_ADDRESS, null);
-        String macAddress = preferences.getString(WolTileApplication.PREF_MAC_ADDRESS, null);
-        int port = preferences.getInt(WolTileApplication.PREF_PORT, WolTileApplication.DEFAULT_PORT);
+        String ipAddress = preferences.getString(AppSettings.PREF_IP_ADDRESS, null);
+        String macAddress = preferences.getString(AppSettings.PREF_MAC_ADDRESS, null);
+        int port = preferences.getInt(AppSettings.PREF_PORT, Host.DEFAULT_PORT);
         if (!TextUtils.isEmpty(ipAddress) && !TextUtils.isEmpty(macAddress)) {
             new WakeOnLanTask(ipAddress, macAddress, port).execute();
         } else {
@@ -88,7 +103,7 @@ public class WolTileService extends TileService {
         @Override
         protected Void doInBackground(Void... param) {
             try {
-                byte[] macBytes = MacUtils.getMacBytes(macAddress);
+                byte[] macBytes = NetUtils.MacUtils.getMacBytes(macAddress);
                 byte[] bytes = new byte[6 + 16 * macBytes.length];
                 for (int i = 0; i < 6; i++) {
                     bytes[i] = (byte) 0xFF;
