@@ -1,10 +1,31 @@
 package com.gaelanbolger.woltile.settings;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 public class AppSettings {
 
-    public static final String PREF_HOST_NAME = "host_name";
-    public static final String PREF_IP_ADDRESS = "ip_address";
-    public static final String PREF_MAC_ADDRESS = "mac_address";
-    public static final String PREF_PORT = "port";
-    public static final String PREF_ICON = "icon";
+    public static final String PREF_FAST_DISCOVER = "pref_fast_discover";
+
+    private static SharedPreferences sPreferences;
+
+    public static boolean getBoolean(Context context, String key, boolean defValue) {
+        return getSharedPreferences(context).getBoolean(key, defValue);
+    }
+
+    public static int getInt(Context context, String key, int defValue) {
+        return getSharedPreferences(context).getInt(key, defValue);
+    }
+
+    public static String getString(Context context, String key, String defValue) {
+        return getSharedPreferences(context).getString(key, defValue);
+    }
+
+    private static SharedPreferences getSharedPreferences(Context context) {
+        if (sPreferences == null) {
+            sPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        }
+        return sPreferences;
+    }
 }

@@ -4,7 +4,25 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="preferenceTheme">@style/AppPreferenceThemeOverlay</item>
     </style>
 
+    <style name="AppPreferenceThemeOverlay" parent="@style/PreferenceThemeOverlay">
+        <item name="android:textAppearanceLarge">@style/TextAppearance.Preference.Title</item>
+        <item name="android:textAppearanceSmall">@style/TextAppearance.Preference.Summary</item>
+    </style>
+
+    <style name="TextAppearance">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="TextAppearance.Preference" />
+
+    <style name="TextAppearance.Preference.Title">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.Preference.Summary">
+        <item name="android:textSize">14sp</item>
+    </style>
 </resources>

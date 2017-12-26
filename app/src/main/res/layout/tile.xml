@@ -6,7 +6,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp">
 
         <ImageView
             android:id="@android:id/icon"
@@ -14,7 +16,7 @@
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
             android:scaleType="centerInside"
-            tools:src="@drawable/ic_laptop_general_normal" />
+            tools:src="@drawable/ic_laptop_general" />
 
         <TextView
             android:id="@android:id/title"

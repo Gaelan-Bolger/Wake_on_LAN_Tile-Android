@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
-        android:defaultValue="Default value"
-        android:key="edit_text_preference_1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="Edit text preference" />
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="check_box_preference_1"
-        android:title="Check box preference" />
-    <SwitchPreferenceCompat
-        android:defaultValue="false"
-        android:key="switch_preference_1"
-        android:title="Switch preference" />
+    <com.gaelanbolger.woltile.settings.SettingsCategory
+        android:key="discover_settings"
+        android:title="@string/discover">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="pref_fast_discover"
+            android:summaryOff="Perform slow discover scans, best for weaker networks."
+            android:summaryOn="Perform fast discover scans, best for most networks."
+            android:title="Fast discovery" />
+    </com.gaelanbolger.woltile.settings.SettingsCategory>
 </PreferenceScreen>

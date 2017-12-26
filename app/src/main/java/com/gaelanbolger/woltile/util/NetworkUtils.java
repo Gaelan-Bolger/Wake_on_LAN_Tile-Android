@@ -5,7 +5,16 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.RequiresPermission;
+import android.util.Log;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class NetworkUtils {
@@ -66,6 +75,27 @@ public class NetworkUtils {
                 throw new IllegalArgumentException("Invalid hex digit in MAC address");
             }
             return bytes;
+        }
+    }
+
+    public static class ArpUtils {
+
+        private static final String TAG = ArpUtils.class.getSimpleName();
+
+        public static Map<String, String> getArpTable() {
+            HashMap<String, String> arpTable = new HashMap<>();
+            try {
+                File file = new File("/proc/net/arp");
+                List<String> arpList = FileUtils.readLines(file, Charset.defaultCharset());
+                for (String s : arpList) {
+                    String[] splitted = s.split(" +");
+                    if (splitted[0].equals("IP")) continue;
+                    arpTable.put(splitted[0], splitted[3]);
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "getArpTable: Error reading arp file", e);
+            }
+            return arpTable;
         }
     }
 }

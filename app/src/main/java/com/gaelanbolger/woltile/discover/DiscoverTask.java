@@ -9,12 +9,17 @@ import android.text.format.Formatter;
 import android.util.Log;
 
 import com.gaelanbolger.woltile.data.Host;
+import com.gaelanbolger.woltile.settings.AppSettings;
+import com.gaelanbolger.woltile.util.NetworkUtils;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Map;
+
+import static com.gaelanbolger.woltile.settings.AppSettings.getBoolean;
 
 public class DiscoverTask extends AsyncTask<Void, Host, Void> {
 
@@ -40,9 +45,12 @@ public class DiscoverTask extends AsyncTask<Void, Host, Void> {
     protected Void doInBackground(Void... voids) {
         Context context = mContextRef.get();
         if (context != null) {
+            boolean fastDiscover = getBoolean(context, AppSettings.PREF_FAST_DISCOVER, true);
+            int timeout = fastDiscover ? 50 : 200;
             WifiManager wifiManager = context.getSystemService(WifiManager.class);
             if (wifiManager != null) {
                 WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                Map<String, String> arpTable = NetworkUtils.ArpUtils.getArpTable();
                 int ipAddress = wifiInfo.getIpAddress();
                 String ipString = Formatter.formatIpAddress(ipAddress);
                 String prefix = ipString.substring(0, ipString.lastIndexOf(".") + 1);
@@ -51,10 +59,11 @@ public class DiscoverTask extends AsyncTask<Void, Host, Void> {
                     if (!TextUtils.equals(ipString, testIp)) {
                         try {
                             InetAddress inetAddress = InetAddress.getByName(testIp);
-                            if (inetAddress.isReachable(90)) {
+                            if (inetAddress.isReachable(timeout)) {
                                 Host host = new Host();
                                 host.setName(inetAddress.getHostName());
                                 host.setIp(inetAddress.getHostAddress());
+                                host.setMac(arpTable.get(host.getIp()));
                                 publishProgress(host);
                                 mHosts.add(host);
                             }

@@ -25,7 +25,6 @@ import com.gaelanbolger.woltile.util.NetworkUtils;
 
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
-import butterknife.OnClick;
 
 import static butterknife.ButterKnife.bind;
 
@@ -151,7 +150,6 @@ public class EditTileActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.b_discover_hosts)
     public void onDiscoverHosts(View view) {
         Intent intent = new Intent(this, DiscoverActivity.class);
         startActivityForResult(intent, REQ_DISC_HOST);
