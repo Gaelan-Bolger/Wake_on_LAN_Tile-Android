@@ -7,9 +7,23 @@
 
         <SwitchPreferenceCompat
             android:defaultValue="true"
-            android:key="pref_fast_discover"
+            android:key="fast_discover"
             android:summaryOff="Perform slow discover scans, best for weaker networks."
             android:summaryOn="Perform fast discover scans, best for most networks."
             android:title="Fast discovery" />
+    </com.gaelanbolger.woltile.settings.SettingsCategory>
+
+    <com.gaelanbolger.woltile.settings.SettingsCategory
+        android:key="about_settings"
+        android:title="@string/about">
+
+        <Preference
+            android:key="open_source_software"
+            android:title="@string/open_source_software" />
+        <Preference
+            android:enabled="false"
+            android:key="app_version"
+            android:summary="@string/app_version"
+            android:title="@string/app_developer" />
     </com.gaelanbolger.woltile.settings.SettingsCategory>
 </PreferenceScreen>

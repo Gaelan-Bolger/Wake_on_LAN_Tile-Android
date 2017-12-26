@@ -45,7 +45,7 @@ public class DiscoverTask extends AsyncTask<Void, Host, Void> {
     protected Void doInBackground(Void... voids) {
         Context context = mContextRef.get();
         if (context != null) {
-            boolean fastDiscover = getBoolean(context, AppSettings.PREF_FAST_DISCOVER, true);
+            boolean fastDiscover = getBoolean(context, AppSettings.FAST_DISCOVER, true);
             int timeout = fastDiscover ? 50 : 200;
             WifiManager wifiManager = context.getSystemService(WifiManager.class);
             if (wifiManager != null) {

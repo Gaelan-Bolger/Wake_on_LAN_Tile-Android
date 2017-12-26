@@ -1,23 +1,21 @@
 <resources>
-    <string name="app_name">WoL Tile</string>
+    <string name="app_name" translatable="false">WoL Tile</string>
+    <string name="app_developer" translatable="false">Gaelan Bolger</string>
+    <string name="app_version">Version: %s</string>
+    <string name="about">About</string>
+    <string name="discover">Discover</string>
+    <string name="edit">Edit</string>
+    <string name="loading">Loading</string>
+    <string name="open_source_software">Open source software</string>
+    <string name="save">Save</string>
+    <string name="settings">Settings</string>
 
-    <string name="new_host">New Host</string>
-    <string name="edit_host">Edit Host</string>
-    <string name="discover_hosts">Discover Hosts</string>
-    <string name="host">Host</string>
     <string name="host_name">Host Name</string>
     <string name="ip_address">IP Address</string>
     <string name="mac_address">MAC Address</string>
     <string name="port_number">Port Number</string>
-    <string name="custom">Custom</string>
     <string name="_7">7</string>
     <string name="_9">9</string>
-
-    <string name="loading">Loading</string>
-    <string name="save">Save</string>
-    <string name="edit">Edit</string>
-    <string name="discover">Discover</string>
-    <string name="settings">Settings</string>
 
     <string name="tile_1">WoL Tile 1</string>
     <string name="tile_2">WoL Tile 2</string>
@@ -31,4 +29,11 @@
     <string name="tile_disabled">Tile disabled</string>
     <string name="tile_enabled">Tile enabled</string>
     <string name="confirm_delete_tile">Delete tile?</string>
+
+    <string name="licenses_dialog_css" translatable="false"><![CDATA[
+        body { overflow-wrap: break-word; background-color: #282828; color: white; }
+        li { font-size: 1.0em; padding: 5px, 5px, 10px, 5px; }
+        a { font-size: 0.8em; color: #c1131f; }\n
+        pre { font-family: monospace; font-size: 0.8em; background-color: rgba(0,0,0,0.2); padding: 1em; white-space: pre-wrap; }
+    ]]></string>
 </resources>

@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 
 public class AppSettings {
 
-    public static final String PREF_FAST_DISCOVER = "pref_fast_discover";
+    public static final String FAST_DISCOVER = "fast_discover";
 
     private static SharedPreferences sPreferences;
 
