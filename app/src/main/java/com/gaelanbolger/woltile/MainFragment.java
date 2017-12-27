@@ -74,6 +74,18 @@ public class MainFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Intent intent = getActivity().getIntent();
+        if (intent != null && intent.hasExtra(EditTileActivity.EXTRA_TILE_COMPONENT)) {
+            String tileComponentName = intent.getStringExtra(EditTileActivity.EXTRA_TILE_COMPONENT);
+            intent = new Intent(getActivity(), EditTileActivity.class);
+            intent.putExtra(EditTileActivity.EXTRA_TILE_COMPONENT, tileComponentName);
+            startActivityForResult(intent, REQ_EDIT_TILE);
+        }
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_EDIT_TILE) {
