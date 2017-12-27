@@ -5,12 +5,16 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.RequiresPermission;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
@@ -32,17 +36,53 @@ public class NetworkUtils {
 
     public static class IpUtils {
 
-        public static final String REGEX_IPV4 = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+        private static final String TAG = IpUtils.class.getSimpleName();
+        private static final String REGEX_IPV4 = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
 
-        public static boolean isValid(String ip) {
+        public static boolean isValid(String ipAddress) {
+            if (TextUtils.isEmpty(ipAddress)) return false;
+
             Pattern pattern = Pattern.compile(REGEX_IPV4);
-            return pattern.matcher(ip).matches();
+            return pattern.matcher(ipAddress).matches();
+        }
+
+        public static boolean canPing(String ipAddress) {
+            if (TextUtils.isEmpty(ipAddress)) return false;
+
+            Process process = null;
+            BufferedReader reader = null;
+            try {
+                process = new ProcessBuilder()
+                        .command("/system/bin/ping", ipAddress)
+                        .redirectErrorStream(true)
+                        .start();
+                reader = new BufferedReader(new InputStreamReader(
+                        process.getInputStream()
+                ));
+                String line;
+                int i = 0;
+                while ((line = reader.readLine()) != null && i < 5) {
+                    if (line.toLowerCase().contains("unreachable")) {
+                        return false;
+                    }
+                    ++i;
+                }
+                return true;
+            } catch (IOException e) {
+                Log.e(TAG, "canPing: Error pinging ip address: " + ipAddress);
+                return false;
+            } finally {
+                IOUtils.closeQuietly(reader);
+                if (process != null) {
+                    process.destroy();
+                }
+            }
         }
     }
 
     public static class MacUtils {
 
-        public static final String REGEX_MAC = "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$";
+        private static final String REGEX_MAC = "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$";
 
         public static boolean isValid(String mac) {
             Pattern pattern = Pattern.compile(REGEX_MAC);

@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.gaelanbolger.woltile.settings.SettingsCategory
+        android:key="wol_settings"
+        android:title="@string/wol">
+
+        <SeekBarPreference
+            android:defaultValue="1"
+            android:key="packet_count"
+            android:max="7"
+            android:summary="Sending more packets can help to wake-up unresponsive hosts"
+            android:title="Packet count"
+            app:min="1" />
+    </com.gaelanbolger.woltile.settings.SettingsCategory>
 
     <com.gaelanbolger.woltile.settings.SettingsCategory
         android:key="discover_settings"
@@ -8,9 +22,16 @@
         <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="fast_discover"
-            android:summaryOff="Perform slow discover scans, best for weaker networks."
-            android:summaryOn="Perform fast discover scans, best for most networks."
+            android:summaryOff="Perform slow discover scans, best for weaker networks"
+            android:summaryOn="Perform fast discover scans, best for most networks"
             android:title="Fast discovery" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="mt_discover"
+            android:summaryOff="Perform discover scans on a single thread"
+            android:summaryOn="Perform discover scans on multiple threads"
+            android:title="Multi-thread discovery" />
     </com.gaelanbolger.woltile.settings.SettingsCategory>
 
     <com.gaelanbolger.woltile.settings.SettingsCategory

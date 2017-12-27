@@ -10,7 +10,7 @@ public class DiscoverViewModel extends AndroidViewModel {
 
     public DiscoverViewModel(@NonNull Application application) {
         super(application);
-        data = new DiscoverLiveData(application, new DiscoverResult());
+        data = new DiscoverLiveData(application);
     }
 
     public DiscoverLiveData getData() {

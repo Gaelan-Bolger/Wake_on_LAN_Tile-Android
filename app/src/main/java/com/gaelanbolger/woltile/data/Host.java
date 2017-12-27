@@ -27,6 +27,13 @@ public class Host {
         this.id = id;
     }
 
+    @Ignore
+    public Host(String name, String ip, String mac) {
+        this.name = name;
+        this.ip = ip;
+        this.mac = mac;
+    }
+
     public long getId() {
         return id;
     }

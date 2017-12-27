@@ -9,10 +9,11 @@
 
     <style name="AppPreferenceThemeOverlay" parent="@style/PreferenceThemeOverlay">
         <item name="android:textAppearanceLarge">@style/TextAppearance.Preference.Title</item>
+        <item name="android:textAppearanceMedium">@style/TextAppearance.Preference.Title</item>
         <item name="android:textAppearanceSmall">@style/TextAppearance.Preference.Summary</item>
     </style>
 
-    <style name="TextAppearance">
+    <style name="TextAppearance" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
