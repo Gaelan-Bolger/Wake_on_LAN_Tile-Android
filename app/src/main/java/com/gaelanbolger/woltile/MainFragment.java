@@ -58,7 +58,6 @@ public class MainFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         bind(this, view);
-
         TileComponent[] tileComponents = TileComponent.values();
         if (tileComponents.length != mTileViews.length)
             throw new IllegalArgumentException("A TileComponent must be provided for every TileView");
@@ -77,12 +76,7 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Intent intent = getActivity().getIntent();
-        if (intent != null && intent.hasExtra(EditTileActivity.EXTRA_TILE_COMPONENT)) {
-            String tileComponentName = intent.getStringExtra(EditTileActivity.EXTRA_TILE_COMPONENT);
-            intent = new Intent(getActivity(), EditTileActivity.class);
-            intent.putExtra(EditTileActivity.EXTRA_TILE_COMPONENT, tileComponentName);
-            startActivityForResult(intent, REQ_EDIT_TILE);
-        }
+        onNewIntent(intent);
     }
 
     @Override
@@ -105,9 +99,7 @@ public class MainFragment extends Fragment {
             R.id.tile_6, R.id.tile_7, R.id.tile_8, R.id.tile_9})
     public void onTileClick(TileView tileView) {
         TileComponent tileComponent = (TileComponent) tileView.getTag();
-        Intent intent = new Intent(getActivity(), EditTileActivity.class);
-        intent.putExtra(EditTileActivity.EXTRA_TILE_COMPONENT, tileComponent.name());
-        startActivityForResult(intent, REQ_EDIT_TILE);
+        onEditTile(tileComponent);
     }
 
     @OnLongClick({R.id.tile_1, R.id.tile_2, R.id.tile_3, R.id.tile_4, R.id.tile_5,
@@ -143,6 +135,19 @@ public class MainFragment extends Fragment {
             return true;
         }
         return false;
+    }
+
+    public void onNewIntent(Intent intent) {
+        if (intent != null && intent.hasExtra(EditTileActivity.EXTRA_TILE_COMPONENT)) {
+            String tileComponentName = intent.getStringExtra(EditTileActivity.EXTRA_TILE_COMPONENT);
+            onEditTile(TileComponent.valueOf(tileComponentName));
+        }
+    }
+
+    private void onEditTile(TileComponent tileComponent) {
+        Intent intent = new Intent(getActivity(), EditTileActivity.class);
+        intent.putExtra(EditTileActivity.EXTRA_TILE_COMPONENT, tileComponent.name());
+        startActivityForResult(intent, REQ_EDIT_TILE);
     }
 
     private void refreshTileView(TileComponent tileComponent) {

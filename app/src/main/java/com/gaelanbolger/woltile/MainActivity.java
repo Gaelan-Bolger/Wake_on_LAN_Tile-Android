@@ -1,5 +1,6 @@
 package com.gaelanbolger.woltile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -9,12 +10,20 @@ import com.gaelanbolger.woltile.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    private MainFragment mMainFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MainFragment f = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
-        if (f == null) f = new MainFragment();
-        getSupportFragmentManager().beginTransaction().replace(android.R.id.content, f, MainFragment.TAG).commit();
+        mMainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.TAG);
+        if (mMainFragment == null) mMainFragment = new MainFragment();
+        getSupportFragmentManager().beginTransaction().replace(android.R.id.content, mMainFragment, MainFragment.TAG).commit();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        mMainFragment.onNewIntent(intent);
     }
 
     @Override
