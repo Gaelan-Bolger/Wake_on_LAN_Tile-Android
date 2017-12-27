@@ -1,16 +1,26 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat">
+        <item name="android:windowBackground">@color/colorWindow</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/AppPreferenceThemeOverlay</item>
+        <item name="android:alertDialogTheme">@style/AppAlertDialogTheme</item>
+        <item name="alertDialogTheme">@style/AppAlertDialogTheme</item>
     </style>
 
     <style name="AppPreferenceThemeOverlay" parent="@style/PreferenceThemeOverlay">
         <item name="android:textAppearanceLarge">@style/TextAppearance.Preference.Title</item>
         <item name="android:textAppearanceMedium">@style/TextAppearance.Preference.Title</item>
         <item name="android:textAppearanceSmall">@style/TextAppearance.Preference.Summary</item>
+    </style>
+
+    <style name="AppAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/colorWindow</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="TextAppearance" parent="TextAppearance.AppCompat">

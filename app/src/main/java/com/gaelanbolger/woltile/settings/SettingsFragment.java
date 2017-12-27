@@ -24,7 +24,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.prefs, rootKey);
 
         /* About Settings */
-        findPreference("open_source_software").setOnPreferenceClickListener(p -> {
+        findPreference("open_source_software").setOnPreferenceClickListener(preference -> {
             new LicensesDialog.Builder(getActivity())
                     .setNotices(R.raw.notices)
                     .setNoticesCssStyle(R.string.licenses_dialog_css)

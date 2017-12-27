@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.IconPopupMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import com.gaelanbolger.woltile.data.AppDatabase;
 import com.gaelanbolger.woltile.data.Host;
 import com.gaelanbolger.woltile.dialog.ConfirmActionDialog;
 import com.gaelanbolger.woltile.qs.TileComponent;
+import com.gaelanbolger.woltile.qs.WakeOnLanTask;
+import com.gaelanbolger.woltile.settings.AppSettings;
 import com.gaelanbolger.woltile.util.ResourceUtils;
 import com.gaelanbolger.woltile.view.TileView;
 
@@ -78,11 +81,10 @@ public class MainFragment extends Fragment {
                 String tileComponentName = data.getStringExtra(EditTileActivity.EXTRA_TILE_COMPONENT);
                 TileComponent tileComponent = TileComponent.valueOf(tileComponentName);
                 ComponentName cn = new ComponentName(getActivity(), tileComponent.getServiceClass());
-                if (!isComponentEnabled(getPackageManager(), cn)) {
+                if (!isComponentEnabled(getPackageManager(), cn))
                     setComponentEnabled(getPackageManager(), cn, true);
-                    Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.tile_enabled, Snackbar.LENGTH_SHORT).show();
-                }
                 refreshTileView(tileComponent);
+                makeSnackbar(R.string.tile_enabled);
             }
         }
     }
@@ -102,13 +104,30 @@ public class MainFragment extends Fragment {
         TileComponent tileComponent = (TileComponent) tileView.getTag();
         Host host = mDb.hostDao().getById(tileComponent.ordinal());
         if (host != null) {
-            ConfirmActionDialog.newInstance(getString(R.string.confirm_delete_tile), () -> {
-                mDb.hostDao().delete(host);
-                ComponentName cn = new ComponentName(getActivity(), tileComponent.getServiceClass());
-                setComponentEnabled(getPackageManager(), cn, false);
-                refreshTileView(tileComponent);
-                Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.tile_disabled, Snackbar.LENGTH_SHORT).show();
-            }).show(getChildFragmentManager(), ConfirmActionDialog.TAG);
+            IconPopupMenu popupMenu = new IconPopupMenu(getActivity(), tileView);
+            popupMenu.getMenuInflater().inflate(R.menu.popup_tile, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.item_send:
+                        int packetCount = AppSettings.getPacketCount(getActivity());
+                        for (int i = 0; i < packetCount; i++) {
+                            new WakeOnLanTask(host.getIp(), host.getMac(), host.getPort()).execute();
+                        }
+                        return true;
+                    case R.id.item_delete:
+                        ConfirmActionDialog.newInstance(getString(R.string.confirm_delete_tile), () -> {
+                            mDb.hostDao().delete(host);
+                            ComponentName cn = new ComponentName(getActivity(), tileComponent.getServiceClass());
+                            if (isComponentEnabled(getPackageManager(), cn))
+                                setComponentEnabled(getPackageManager(), cn, false);
+                            refreshTileView(tileComponent);
+                            makeSnackbar(R.string.tile_disabled);
+                        }).show(getChildFragmentManager(), ConfirmActionDialog.TAG);
+                        return true;
+                }
+                return false;
+            });
+            popupMenu.show();
             return true;
         }
         return false;
@@ -126,6 +145,10 @@ public class MainFragment extends Fragment {
         }
         ComponentName cn = new ComponentName(getActivity(), tileComponent.getServiceClass());
         tileView.setEnabled(isComponentEnabled(getPackageManager(), cn));
+    }
+
+    private void makeSnackbar(int resId) {
+        Snackbar.make(getActivity().findViewById(android.R.id.content), resId, Snackbar.LENGTH_SHORT).show();
     }
 
     private PackageManager getPackageManager() {

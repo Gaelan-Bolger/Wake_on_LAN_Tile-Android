@@ -10,7 +10,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 // https://stackoverflow.com/a/13655016/1670446
-class WakeOnLanTask extends AsyncTask<Void, Void, Void> {
+public class WakeOnLanTask extends AsyncTask<Void, Void, Void> {
 
     private static final String TAG = WakeOnLanTask.class.getSimpleName();
 
@@ -18,7 +18,7 @@ class WakeOnLanTask extends AsyncTask<Void, Void, Void> {
     private String macAddress;
     private int port;
 
-    WakeOnLanTask(String ipAddress, String macAddress, int port) {
+    public WakeOnLanTask(String ipAddress, String macAddress, int port) {
         this.ipAddress = ipAddress;
         this.macAddress = macAddress;
         this.port = port;

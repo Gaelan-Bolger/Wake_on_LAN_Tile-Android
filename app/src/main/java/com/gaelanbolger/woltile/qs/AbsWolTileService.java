@@ -45,16 +45,12 @@ public abstract class AbsWolTileService extends TileService {
 
         String name = mHost.getName();
         getQsTile().setLabel(!TextUtils.isEmpty(name) ? name : getString(getTileComponent().getTitleResId()));
+
         int resId = ResourceUtils.getDrawableForName(this, mHost.getIcon());
         getQsTile().setIcon(Icon.createWithResource(this, resId > 0 ? resId : R.drawable.ic_laptop_general));
-        getQsTile().setState(Tile.STATE_UNAVAILABLE);
-        getQsTile().updateTile();
 
-        int state = Tile.STATE_INACTIVE;
         boolean wifiConnected = NetworkUtils.isWifiConnected(this);
-        if (wifiConnected && NetworkUtils.IpUtils.canPing(mHost.getIp())) {
-            state = Tile.STATE_ACTIVE;
-        }
+        int state = wifiConnected ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE;
         getQsTile().setState(state);
         getQsTile().updateTile();
     }
@@ -72,7 +68,7 @@ public abstract class AbsWolTileService extends TileService {
         String ipAddress = mHost.getIp();
         String macAddress = mHost.getMac();
         int port = mHost.getPort();
-        if (!TextUtils.isEmpty(ipAddress) && !TextUtils.isEmpty(macAddress)) {
+        if (!TextUtils.isEmpty(ipAddress) && !TextUtils.isEmpty(macAddress) && port > 0) {
             int packetCount = AppSettings.getPacketCount(this);
             for (int i = 0; i < packetCount; i++) {
                 new WakeOnLanTask(ipAddress, macAddress, port).execute();
