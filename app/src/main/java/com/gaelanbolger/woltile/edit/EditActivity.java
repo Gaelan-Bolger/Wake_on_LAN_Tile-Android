@@ -1,4 +1,4 @@
-package com.gaelanbolger.woltile;
+package com.gaelanbolger.woltile.edit;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
+import com.gaelanbolger.woltile.R;
 import com.gaelanbolger.woltile.adapter.TileIconAdapter;
 import com.gaelanbolger.woltile.data.AppDatabase;
 import com.gaelanbolger.woltile.data.Host;
@@ -25,19 +26,23 @@ import com.gaelanbolger.woltile.util.NetworkUtils;
 
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static butterknife.ButterKnife.bind;
 
-public class EditTileActivity extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity {
 
-    private static final String TAG = EditTileActivity.class.getSimpleName();
+    private static final String TAG = EditActivity.class.getSimpleName();
     private static final int REQ_DISC_HOST = 1028;
     public static final String EXTRA_TILE_COMPONENT = "tile_component";
 
     private TileComponent mTileComponent;
-    private AppDatabase mDb;
     private Host mHost;
+    private AppDatabase mDatabase;
     private TileIconAdapter mIconAdapter;
+    private CompositeDisposable mDisposable = new CompositeDisposable();
 
     @BindView(R.id.rv_tile_icon)
     RecyclerView mIconRecycler;
@@ -55,15 +60,12 @@ public class EditTileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!getIntent().hasExtra(EXTRA_TILE_COMPONENT))
+        Intent intent = getIntent();
+        if (intent == null || !intent.hasExtra(EXTRA_TILE_COMPONENT))
             throw new IllegalArgumentException("Must provide a TileComponent name with Intent");
-        String tileComponentName = getIntent().getStringExtra(EXTRA_TILE_COMPONENT);
+        String tileComponentName = intent.getStringExtra(EXTRA_TILE_COMPONENT);
         mTileComponent = TileComponent.valueOf(tileComponentName);
-
-        int hostId = mTileComponent.ordinal();
-        mDb = AppDatabase.getInstance(this);
-        mHost = mDb.hostDao().getById(hostId);
-        if (mHost == null) mHost = new Host(hostId);
+        mHost = new Host(mTileComponent.ordinal());
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -75,28 +77,29 @@ public class EditTileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_tile);
         bind(this);
 
-        String hostIcon = mHost.getIcon();
-        String[] iconItems = getResources().getStringArray(R.array.tile_icon_option_names);
-        String selectedItem = !TextUtils.isEmpty(hostIcon) ? hostIcon : iconItems[0];
-        mIconAdapter = new TileIconAdapter(this, iconItems, selectedItem, null);
-        mIconRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        mIconRecycler.setAdapter(mIconAdapter);
-        mHostNameText.setText(mHost.getName());
-        mIpAddressText.setText(mHost.getIp());
-        mMacAddressText.setText(mHost.getMac());
-        switch (mHost.getPort()) {
-            case 7:
-                mPortGroup.check(R.id.rb_port_7);
-                break;
-            case 9:
-                mPortGroup.check(R.id.rb_port_9);
-                break;
-            default:
-                mPortGroup.check(R.id.rb_port_user);
-                mPortNumberText.setText(String.valueOf(mHost.getPort()));
-                mPortNumberText.clearFocus();
-                break;
-        }
+        updateViews();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mDatabase = AppDatabase.getInstance(this);
+        mDisposable.add(mDatabase.hostDao().getByIdRx(mHost.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        host -> {
+                            mHost = host;
+                            updateViews();
+                        },
+                        throwable -> Log.e(TAG, "onStart: Error retrieving host", throwable)
+                ));
+    }
+
+    @Override
+    protected void onStop() {
+        mDisposable.clear();
+        super.onStop();
     }
 
     @Override
@@ -134,6 +137,31 @@ public class EditTileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void updateViews() {
+        String hostIcon = mHost.getIcon();
+        String[] iconItems = getResources().getStringArray(R.array.tile_icon_option_names);
+        String selectedItem = !TextUtils.isEmpty(hostIcon) ? hostIcon : iconItems[0];
+        mIconAdapter = new TileIconAdapter(this, iconItems, selectedItem, null);
+        mIconRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mIconRecycler.setAdapter(mIconAdapter);
+        mHostNameText.setText(mHost.getName());
+        mIpAddressText.setText(mHost.getIp());
+        mMacAddressText.setText(mHost.getMac());
+        switch (mHost.getPort()) {
+            case 7:
+                mPortGroup.check(R.id.rb_port_7);
+                break;
+            case 9:
+                mPortGroup.check(R.id.rb_port_9);
+                break;
+            default:
+                mPortGroup.check(R.id.rb_port_user);
+                mPortNumberText.setText(String.valueOf(mHost.getPort()));
+                mPortNumberText.clearFocus();
+                break;
+        }
+    }
+
     @OnCheckedChanged({R.id.rb_port_7, R.id.rb_port_9, R.id.rb_port_user})
     public void onPortChanged(CompoundButton button, boolean checked) {
         if (!checked) return;
@@ -166,7 +194,7 @@ public class EditTileActivity extends AppCompatActivity {
             mHost.setMac(macAddress);
             mHost.setPort(port);
             mHost.setIcon(mIconAdapter.getSelectedItem());
-            mDb.hostDao().insertAll(mHost);
+            AppDatabase.io().execute(() -> mDatabase.hostDao().insertAll(mHost));
 
             Intent data = new Intent();
             data.putExtra(EXTRA_TILE_COMPONENT, mTileComponent.name());

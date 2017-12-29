@@ -8,15 +8,19 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
-import com.gaelanbolger.woltile.EditTileActivity;
-import com.gaelanbolger.woltile.MainActivity;
 import com.gaelanbolger.woltile.R;
 import com.gaelanbolger.woltile.data.AppDatabase;
 import com.gaelanbolger.woltile.data.Host;
+import com.gaelanbolger.woltile.edit.EditActivity;
+import com.gaelanbolger.woltile.main.TilesActivity;
 import com.gaelanbolger.woltile.settings.AppSettings;
 import com.gaelanbolger.woltile.util.NetworkUtils;
 import com.gaelanbolger.woltile.util.ResourceUtils;
 import com.gaelanbolger.woltile.view.OnDoubleClickListener;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public abstract class AbsWolTileService extends TileService {
 
@@ -24,21 +28,29 @@ public abstract class AbsWolTileService extends TileService {
 
     private Host mHost;
     private OnDoubleClickListener mClickListener = new TileClickListener();
-
-    @Override
-    public void onTileAdded() {
-        super.onTileAdded();
-        Log.d(TAG, "onTileAdded: " + getTileComponent().getServiceClass());
-        mHost = getHost();
-        updateTile();
-    }
+    private CompositeDisposable mDisposable = new CompositeDisposable();
 
     @Override
     public void onStartListening() {
         super.onStartListening();
         Log.d(TAG, "onStartListening: " + getTileComponent().getServiceClass());
-        mHost = getHost();
-        updateTile();
+        AppDatabase database = AppDatabase.getInstance(this);
+        mDisposable.add(database.hostDao().getByIdRx(getTileComponent().ordinal())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        host -> {
+                            mHost = host;
+                            updateTile();
+                        },
+                        throwable -> Log.e(TAG, "onStartListening: Error retrieving host", throwable)
+                ));
+    }
+
+    @Override
+    public void onStopListening() {
+        mDisposable.clear();
+        super.onStopListening();
     }
 
     @Override
@@ -59,17 +71,10 @@ public abstract class AbsWolTileService extends TileService {
         getQsTile().updateTile();
     }
 
-    private Host getHost() {
-        AppDatabase db = AppDatabase.getInstance(this);
-        Host host = db.hostDao().getById(getTileComponent().ordinal());
-        if (host == null) return new Host(getTileComponent().ordinal());
-        return host;
-    }
-
     private void showTileEditActivity() {
-        Intent intent = new Intent(AbsWolTileService.this, MainActivity.class);
+        Intent intent = new Intent(AbsWolTileService.this, TilesActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra(EditTileActivity.EXTRA_TILE_COMPONENT, getTileComponent().name());
+        intent.putExtra(EditActivity.EXTRA_TILE_COMPONENT, getTileComponent().name());
         startActivityAndCollapse(intent);
     }
 

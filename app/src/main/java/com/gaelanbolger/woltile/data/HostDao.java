@@ -10,29 +10,26 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Maybe;
+
 @Dao
 public interface HostDao {
 
     @Query("SELECT * FROM Host")
-    List<Host> getAll();
-
-    @Query("SELECT * FROM Host")
     LiveData<List<Host>> getAllLive();
 
-    @Query("SELECT * FROM Host WHERE id = :id")
-    Host getById(int id);
+    @Query("SELECT * FROM Host")
+    Flowable<List<Host>> getAllRx();
 
     @Query("SELECT * FROM Host WHERE id = :id")
-    LiveData<Host> getByIdLive(int id);
+    LiveData<Host> getByIdLive(long id);
 
-    @Query("SELECT COUNT(*) FROM Host")
-    int count();
+    @Query("SELECT * FROM Host WHERE id = :id")
+    Flowable<Host> getByIdRx(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Host... hosts);
-
-    @Update
-    void update(Host host);
 
     @Delete
     void delete(Host host);

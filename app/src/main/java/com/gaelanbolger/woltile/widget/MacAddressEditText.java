@@ -1,4 +1,4 @@
-package com.gaelanbolger.woltile.view;
+package com.gaelanbolger.woltile.widget;
 
 import android.content.Context;
 import android.support.design.widget.TextInputEditText;

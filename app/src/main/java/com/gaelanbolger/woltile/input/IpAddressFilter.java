@@ -1,4 +1,4 @@
-package com.gaelanbolger.woltile.view;
+package com.gaelanbolger.woltile.input;
 
 import android.text.InputFilter;
 import android.text.Spanned;

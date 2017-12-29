@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:padding="8dp">
 
-    <com.gaelanbolger.woltile.view.TileView
+    <com.gaelanbolger.woltile.widget.TileView
         android:id="@+id/tile_1"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.gaelanbolger.woltile.view.TileView
+    <com.gaelanbolger.woltile.widget.TileView
         android:id="@+id/tile_2"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -35,7 +35,7 @@
         app:layout_constraintStart_toEndOf="@id/tile_1"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.gaelanbolger.woltile.view.TileView
+    <com.gaelanbolger.woltile.widget.TileView
         android:id="@+id/tile_3"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -50,7 +50,7 @@
         app:layout_constraintStart_toEndOf="@id/tile_2"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.gaelanbolger.woltile.view.TileView
+    <com.gaelanbolger.woltile.widget.TileView
         android:id="@+id/tile_4"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -65,7 +65,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tile_1" />
 
-    <com.gaelanbolger.woltile.view.TileView
+    <com.gaelanbolger.woltile.widget.TileView
         android:id="@+id/tile_5"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -80,7 +80,7 @@
         app:layout_constraintStart_toEndOf="@id/tile_4"
         app:layout_constraintTop_toBottomOf="@id/tile_2" />
 
-    <com.gaelanbolger.woltile.view.TileView
+    <com.gaelanbolger.woltile.widget.TileView
         android:id="@+id/tile_6"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -95,7 +95,7 @@
         app:layout_constraintStart_toEndOf="@id/tile_5"
         app:layout_constraintTop_toBottomOf="@id/tile_3" />
 
-    <com.gaelanbolger.woltile.view.TileView
+    <com.gaelanbolger.woltile.widget.TileView
         android:id="@+id/tile_7"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -110,7 +110,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tile_4" />
 
-    <com.gaelanbolger.woltile.view.TileView
+    <com.gaelanbolger.woltile.widget.TileView
         android:id="@+id/tile_8"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -125,7 +125,7 @@
         app:layout_constraintStart_toEndOf="@id/tile_7"
         app:layout_constraintTop_toBottomOf="@id/tile_5" />
 
-    <com.gaelanbolger.woltile.view.TileView
+    <com.gaelanbolger.woltile.widget.TileView
         android:id="@+id/tile_9"
         android:layout_width="0dp"
         android:layout_height="0dp"

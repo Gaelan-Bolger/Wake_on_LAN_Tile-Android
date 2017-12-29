@@ -5,19 +5,29 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 @Database(entities = {Host.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
-    public abstract HostDao hostDao();
+    private static final String DB_NAME = "app";
 
     private static AppDatabase sInstance;
+    private static Executor sDiskIO;
 
     public static synchronized AppDatabase getInstance(Context context) {
-        if (sInstance == null) {
-            sInstance = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "app")
-                    .allowMainThreadQueries() // TODO remove in prod
-                    .build();
-        }
+        if (sInstance == null)
+            sInstance = Room.databaseBuilder(context.getApplicationContext(),
+                    AppDatabase.class, DB_NAME).build();
         return sInstance;
     }
+
+    public static synchronized Executor io() {
+        if (sDiskIO == null)
+            sDiskIO = Executors.newSingleThreadExecutor();
+        return sDiskIO;
+    }
+
+    public abstract HostDao hostDao();
 }

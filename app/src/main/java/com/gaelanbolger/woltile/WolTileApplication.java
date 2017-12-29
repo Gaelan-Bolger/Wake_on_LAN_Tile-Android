@@ -14,8 +14,8 @@ public class WolTileApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate: ");
-        NetworkUtils.initSingleton(this);
         PreferenceManager.setDefaultValues(this, R.xml.prefs, false);
+        NetworkUtils.initSingleton(this);
     }
 
     @Override
