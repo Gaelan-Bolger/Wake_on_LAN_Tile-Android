@@ -12,11 +12,9 @@ import android.widget.TextView;
 import com.gaelanbolger.woltile.edit.EditActivity;
 import com.gaelanbolger.woltile.qs.TileComponent;
 
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
@@ -31,7 +29,6 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 
 @RunWith(AndroidJUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @LargeTest
 public class EditActivityTest {
 
@@ -48,33 +45,32 @@ public class EditActivityTest {
     };
 
     @Test
-    public void test1_checkTitle() throws Exception {
+    public void checkTitle() throws Exception {
         Context context = InstrumentationRegistry.getTargetContext();
         String componentTitle = context.getString(mTileComponent.getTitleResId());
-
         onView(allOf(instanceOf(TextView.class), withParent(instanceOf(Toolbar.class))))
                 .check(matches(withText(componentTitle)));
     }
 
     @Test
-    public void test2_shouldShowHostNameError() throws Exception {
+    public void shouldShowHostNameError() throws Exception {
         onView(withId(R.id.item_save)).perform(click());
         onView(withId(R.id.et_host_name)).check(matches(hasErrorText("Host Name is required")));
     }
 
     @Test
-    public void test3_checkIpAddressFilter() throws Exception {
+    public void checkIpAddressFilter() throws Exception {
         onView(withId(R.id.et_ip_address))
                 .perform(typeText("Aa192..155++.34.255-9999"))
                 .check(matches(withText("192.155.34.255")));
     }
 
     @Test
-    public void test3_checkMacAddressFilter() throws Exception {
+    public void checkMacAddressFilter() throws Exception {
         onView(withId(R.id.et_mac_address))
                 .perform(click())
                 .perform(clearText())
-                .perform(typeText("Aa192.5BDGFE++.3-9999"))
+                .perform(typeText("Aa192.5BdgfmZE++.3-9999"))
                 .check(matches(withText("AA:19:25:BD:FE:39")));
     }
 }

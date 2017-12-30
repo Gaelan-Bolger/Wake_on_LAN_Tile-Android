@@ -16,4 +16,9 @@ public class DiscoverViewModel extends AndroidViewModel {
     public DiscoverLiveData getData() {
         return data;
     }
+
+    @Override
+    protected void onCleared() {
+        data.destroy();
+    }
 }

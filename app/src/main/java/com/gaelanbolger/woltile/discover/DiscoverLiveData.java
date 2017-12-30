@@ -24,6 +24,7 @@ public class DiscoverLiveData extends LiveData<DiscoverResult> {
     private static final int TO_SLOW = 300;
 
     private final DiscoverResult result = new DiscoverResult();
+    private SubnetScannerService scanner;
 
     public DiscoverLiveData(Context context) {
         loadHosts(context);
@@ -32,10 +33,20 @@ public class DiscoverLiveData extends LiveData<DiscoverResult> {
     private void loadHosts(Context context) {
         NetworkUtils networkUtils = NetworkUtils.get(context, false);
         DiscoverCallback discoverCallback = new DiscoverCallback(ArpUtils.getArpTable());
-        SubnetScannerService scannerService = networkUtils.getSubNetScannerService(discoverCallback);
-        scannerService.setTimeout(AppSettings.isFastDiscover(context) ? TO_FAST : TO_SLOW);
-        if (AppSettings.isMtDiscover(context)) scannerService.startMultiThreadScanning();
-        else scannerService.startScan();
+        scanner = networkUtils.getSubNetScannerService(discoverCallback);
+        scanner.setTimeout(AppSettings.isFastDiscover(context) ? TO_FAST : TO_SLOW);
+        if (AppSettings.isMtDiscover(context)) scanner.startMultiThreadScanning();
+        else scanner.startScan();
+    }
+
+    void destroy() {
+        if (scanner != null) {
+            if (scanner.isMultiThreadScanning())
+                scanner.interruptMultiThreadScanning();
+            else if (scanner.isScanning())
+                scanner.stopScan();
+            scanner = null;
+        }
     }
 
     class DiscoverCallback implements ProcessCallback {

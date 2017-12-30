@@ -1,4 +1,4 @@
-package com.gaelanbolger.woltile.adapter;
+package com.gaelanbolger.woltile.discover;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gaelanbolger.woltile.R;
+import com.gaelanbolger.woltile.adapter.OnItemClickListener;
 import com.gaelanbolger.woltile.data.Host;
 
 import java.util.ArrayList;

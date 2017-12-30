@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gaelanbolger.woltile.R;
-import com.gaelanbolger.woltile.adapter.HostAdapter;
 import com.gaelanbolger.woltile.adapter.OnItemClickListener;
 import com.gaelanbolger.woltile.data.Host;
 
@@ -44,18 +43,22 @@ public class DiscoverFragment extends Fragment implements OnItemClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mHostsAdapter = new HostAdapter(getActivity(), this);
+        View view = inflater.inflate(R.layout.fragment_discover, container, false);
+        RecyclerView rv = view.findViewById(R.id.rv_host);
+        rv.addItemDecoration(new DividerItemDecoration(rv.getContext(), DividerItemDecoration.VERTICAL));
+        rv.setLayoutManager(new LinearLayoutManager(rv.getContext()));
+        rv.setAdapter(mHostsAdapter = new HostAdapter(getActivity(), this));
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         mModel.getData().observe(this, data -> {
             if (data != null) {
                 mHostsAdapter.setHosts(data.getHosts());
             }
         });
-        View view = inflater.inflate(R.layout.fragment_discover, container, false);
-        RecyclerView rv = view.findViewById(R.id.rv_host);
-        rv.addItemDecoration(new DividerItemDecoration(rv.getContext(), DividerItemDecoration.VERTICAL));
-        rv.setLayoutManager(new LinearLayoutManager(rv.getContext()));
-        rv.setAdapter(mHostsAdapter);
-        return view;
     }
 
     @Override
