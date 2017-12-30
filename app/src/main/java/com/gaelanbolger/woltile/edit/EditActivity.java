@@ -75,16 +75,6 @@ public class EditActivity extends AppCompatActivity {
         mTileComponent = TileComponent.valueOf(tileComponentName);
         mHost = new Host(mTileComponent.ordinal());
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-            actionBar.setTitle(mTileComponent.getTitleResId());
-        }
-
-        setContentView(R.layout.activity_edit);
-        bind(this);
-
         mDatabase = AppDatabase.getInstance(this);
         if (savedInstanceState == null) {
             mDisposable.add(mDatabase.hostDao().getByIdRx(mHost.getId())
@@ -102,8 +92,18 @@ public class EditActivity extends AppCompatActivity {
             mHost.setName(savedInstanceState.getString("host_name"));
             mHost.setIp(savedInstanceState.getString("ip_address"));
             mHost.setMac(savedInstanceState.getString("mac_address"));
-            updateViews();
         }
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setTitle(mTileComponent.getTitleResId());
+        }
+
+        setContentView(R.layout.activity_edit);
+        bind(this);
+        updateViews();
     }
 
     @Override
