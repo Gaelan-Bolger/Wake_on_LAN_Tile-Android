@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.gaelanbolger.woltile.data.Host;
 import com.gaelanbolger.woltile.settings.AppSettings;
@@ -51,8 +50,6 @@ public class DiscoverLiveData extends LiveData<DiscoverResult> {
 
     class DiscoverCallback implements ProcessCallback {
 
-        private final String TAG = DiscoverCallback.class.getSimpleName();
-
         private Map<String, String> arpTable;
         private String serviceName;
 
@@ -62,13 +59,11 @@ public class DiscoverLiveData extends LiveData<DiscoverResult> {
 
         @Override
         public void onProcessStarted(@NonNull String serviceName) {
-            Log.d(TAG, "onProcessStarted: " + serviceName);
             this.serviceName = serviceName;
         }
 
         @Override
         public void onProcessUpdate(@NonNull Object processUpdate) {
-            Log.d(TAG, "onProcessUpdate: ");
             ScanResult scanResult = (ScanResult) processUpdate;
             if (scanResult.isReachable()) {
                 String hostName = scanResult.getHostName();
@@ -85,14 +80,14 @@ public class DiscoverLiveData extends LiveData<DiscoverResult> {
 
         @Override
         public void onProcessFinished(@NonNull String serviceName, @Nullable String endMessage) {
-            Log.d(TAG, "onProcessFinished: " + endMessage);
             result.setLoaded(true);
             setValue(result);
         }
 
         @Override
         public void onProcessFailed(@NonNull String serviceName, @Nullable String errorMessage, int errorCode) {
-            Log.e(TAG, "onProcessFailed: " + errorMessage);
+            result.setLoaded(true);
+            setValue(result);
         }
     }
 }
