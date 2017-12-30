@@ -155,6 +155,7 @@ public class TilesActivity extends AppCompatActivity implements OnItemClickListe
     private void onEditTile(TileComponent tileComponent) {
         Intent intent = new Intent(this, EditActivity.class);
         intent.putExtra(EditActivity.EXTRA_TILE_COMPONENT, tileComponent.name());
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivityForResult(intent, REQ_EDIT_TILE);
     }
 
