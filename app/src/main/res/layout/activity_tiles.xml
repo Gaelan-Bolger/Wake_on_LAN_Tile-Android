@@ -7,7 +7,7 @@
     tools:context=".main.TilesActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_host"
+        android:id="@+id/rv_tile"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

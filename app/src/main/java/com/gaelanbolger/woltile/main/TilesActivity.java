@@ -36,7 +36,7 @@ public class TilesActivity extends AppCompatActivity implements OnItemClickListe
 
     private TilesAdapter mAdapter;
 
-    @BindView(R.id.rv_host)
+    @BindView(R.id.rv_tile)
     RecyclerView mRecycler;
 
     @Override
