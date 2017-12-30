@@ -43,7 +43,7 @@ public class TilesActivityTest {
     }
 
     @Test
-    public void test2_enableTileAfterHostSelection() throws Exception {
+    public void test2_enableTileAfterHostCreation() throws Exception {
         onView(withId(R.id.rv_tile)).check(matches(atPosition(0, hasDescendant(not(isEnabled())))));
 
         onView(withId(R.id.rv_tile)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
