@@ -1,7 +1,7 @@
 package com.gaelanbolger.woltile;
 
 import android.app.Application;
-import android.preference.PreferenceManager;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import com.pddstudio.networkutils.NetworkUtils;
