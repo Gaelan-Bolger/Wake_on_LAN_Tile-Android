@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.IconPopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -22,6 +24,7 @@ import com.gaelanbolger.woltile.edit.EditActivity;
 import com.gaelanbolger.woltile.qs.TileComponent;
 import com.gaelanbolger.woltile.qs.WakeOnLanTask;
 import com.gaelanbolger.woltile.settings.AppSettings;
+import com.gaelanbolger.woltile.settings.SettingsActivity;
 
 import butterknife.BindView;
 
@@ -85,6 +88,23 @@ public class TilesActivity extends AppCompatActivity implements OnItemClickListe
                     makeSnackbar(R.string.tile_enabled);
                 }
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_tiles, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_settings:
+                SettingsActivity.start(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
