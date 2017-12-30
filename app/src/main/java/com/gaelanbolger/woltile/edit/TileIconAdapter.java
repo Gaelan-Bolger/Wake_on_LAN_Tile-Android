@@ -1,4 +1,4 @@
-package com.gaelanbolger.woltile.adapter;
+package com.gaelanbolger.woltile.edit;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.gaelanbolger.woltile.R;
+import com.gaelanbolger.woltile.adapter.OnItemClickListener;
 
 public class TileIconAdapter extends RecyclerView.Adapter<TileIconAdapter.Holder> {
 

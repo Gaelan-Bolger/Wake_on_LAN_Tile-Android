@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import com.gaelanbolger.woltile.R;
-import com.gaelanbolger.woltile.adapter.TileIconAdapter;
 import com.gaelanbolger.woltile.data.AppDatabase;
 import com.gaelanbolger.woltile.data.Host;
 import com.gaelanbolger.woltile.discover.DiscoverActivity;
@@ -58,6 +57,15 @@ public class EditActivity extends AppCompatActivity {
     EditText mPortNumberText;
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("icon_name", mIconAdapter.getSelectedItem());
+        outState.putString("host_name", mHostNameText.getText().toString());
+        outState.putString("ip_address", mIpAddressText.getText().toString());
+        outState.putString("mac_address", mMacAddressText.getText().toString());
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
@@ -74,32 +82,34 @@ public class EditActivity extends AppCompatActivity {
             actionBar.setTitle(mTileComponent.getTitleResId());
         }
 
-        setContentView(R.layout.activity_edit_tile);
+        setContentView(R.layout.activity_edit);
         bind(this);
 
-        updateViews();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         mDatabase = AppDatabase.getInstance(this);
-        mDisposable.add(mDatabase.hostDao().getByIdRx(mHost.getId())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        host -> {
-                            mHost = host;
-                            updateViews();
-                        },
-                        throwable -> Log.e(TAG, "onStart: Error retrieving host", throwable)
-                ));
+        if (savedInstanceState == null) {
+            mDisposable.add(mDatabase.hostDao().getByIdRx(mHost.getId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            host -> {
+                                mHost = host;
+                                updateViews();
+                            },
+                            throwable -> Log.e(TAG, "onStart: Error retrieving host", throwable)
+                    ));
+        } else {
+            mHost.setIcon(savedInstanceState.getString("icon_name"));
+            mHost.setName(savedInstanceState.getString("host_name"));
+            mHost.setIp(savedInstanceState.getString("ip_address"));
+            mHost.setMac(savedInstanceState.getString("mac_address"));
+            updateViews();
+        }
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
+        super.onDestroy();
         mDisposable.clear();
-        super.onStop();
     }
 
     @Override

@@ -1,14 +1,16 @@
-package com.gaelanbolger.woltile;
+package com.gaelanbolger.woltile.edit;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
+import com.gaelanbolger.woltile.R;
 import com.gaelanbolger.woltile.edit.EditActivity;
 import com.gaelanbolger.woltile.qs.TileComponent;
 
@@ -54,7 +56,7 @@ public class EditActivityTest {
 
     @Test
     public void shouldShowHostNameError() throws Exception {
-        onView(withId(R.id.item_save)).perform(click());
+        onView(ViewMatchers.withId(R.id.item_save)).perform(click());
         onView(withId(R.id.et_host_name)).check(matches(hasErrorText("Host Name is required")));
     }
 
