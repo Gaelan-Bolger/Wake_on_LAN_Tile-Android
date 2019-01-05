@@ -16,12 +16,11 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.1'
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 3
         versionName "1.0.2"
     }
@@ -47,10 +46,14 @@ android {
 }
 
     dependencies {
-        compile fileTree(dir: 'libs', include: ['*.jar'])
-        testCompile 'junit:junit:4.12'
-        compile 'com.android.support:appcompat-v7:27.0.2'
+        implementation fileTree(dir: 'libs', include: ['*.jar'])
+        testImplementation 'junit:junit:4.12'
+
+        implementation 'com.android.support:appcompat-v7:28.0.0'
+
         //gson for json parsing
-        compile 'com.google.code.gson:gson:2.6.1'
-        compile 'com.squareup.okhttp3:okhttp:3.1.2'
+        implementation 'com.google.code.gson:gson:2.8.5'
+        implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+
+        implementation 'commons-io:commons-io:2.4'
     }

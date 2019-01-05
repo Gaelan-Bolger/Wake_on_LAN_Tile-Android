@@ -8,7 +8,7 @@ import android.content.Context;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Host.class}, version = 1)
+@Database(entities = {Host.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "app";
